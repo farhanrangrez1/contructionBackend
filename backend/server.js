@@ -4,7 +4,7 @@ const express = require('express');
 const { DBconnect } = require('./Config/db_config');
 const colors=require('colors')
 require("dotenv").config()
-const routerapi = require('./app') 
+const routerapi = require('./routerapi') 
 
 
 const app =express()
