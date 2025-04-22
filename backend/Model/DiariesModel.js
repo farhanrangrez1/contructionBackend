@@ -2,27 +2,27 @@ const mongoose =require("mongoose")
 
 
 const DiariesSchema = new mongoose.Schema({
-    Date:{
+    date:{
         type:Date,
         required:true,
     },
-    ProjectName:{
+    projectName:{
         type:String,
         required:true,
     },
-    SupervisorName:{
+    supervisorName:{
         type:String,
         required:true,
     },
-    Weather:{
+    weather:{
         type:String,
         required:true,
     },
-    WorkPerformed:{
+    workPerformed:{
         type:String,
         required:true,
     },
-    IssuesDelays:{
+    issuesDelays:{
         type:String,
         required:true,
     },
