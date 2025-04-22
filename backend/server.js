@@ -5,7 +5,9 @@ const path = require('path');
 const colors=require('colors')
 
 //Routes
+const authRoutes = require('./Router/Auth/authRouter')
 const userRoutes = require('./Router/User/user')
+
 require("dotenv").config()
 
 const app =express()
@@ -23,6 +25,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //User Routes
 
 
+app.use('/api', authRoutes);
 app.use('/api/users', userRoutes);
 
 // Projects Router

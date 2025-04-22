@@ -1,9 +1,9 @@
 // controllers/userController.js
 const User  = require('../../Model/user.model');
 const multer = require('multer');
-const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
+const { cloudinary } = require('../../Config/cloudinary_config');
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '../public/img/users');
@@ -29,27 +29,6 @@ const upload = multer({
 });
 
 exports.uploadUserPhoto = upload.single('profileImage');
-
-exports.resizeUserPhoto = async (req, res, next) => {
-  try {
-    if (!req.file) return next();
-    
-    req.file.filename = `user-${Date.now()}.jpeg`;
-    
-    await sharp(req.file.buffer)
-      .resize(500, 500)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(`public/img/users/${req.file.filename}`);
-    
-    next();
-  } catch (err) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'Error processing image'
-    });
-  }
-};
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -80,22 +59,35 @@ exports.createUser = async (req, res) => {
       });
     }
     
-    // Set profile image if uploaded
+    // Handle profile image
+    let profileImage = null;
     if (req.file) {
-      req.body.profileImage = req.file.filename;
+      // Upload to cloudinary if file is provided
+      const result = await cloudinary.uploader.upload(req.file.buffer.toString('base64'), {
+        folder: 'user_profiles',
+        resource_type: 'auto'
+      });
+      profileImage = result.secure_url;
+    } else if (req.body.profileImage) {
+      // Use the provided URL string directly
+      profileImage = req.body.profileImage;
     }
     
-    // Set permissions
-    const permissions = {
-      viewProjectDetails: !!req.body.viewProjectDetails,
-      editProjectInformation: !!req.body.editProjectInformation,
-      manageTeamMembers: !!req.body.manageTeamMembers,
-      accessFinancialData: !!req.body.accessFinancialData
+    // Set permissions - use provided permissions or defaults
+    const permissions = req.body.permissions || {
+      viewProjectDetails: false,
+      editProjectInformation: false,
+      manageTeamMembers: false,
+      accessFinancialData: false
     };
     
-    req.body.permissions = permissions;
+    const userData = {
+      ...req.body,
+      permissions,
+      profileImage
+    };
     
-    const newUser = await User.create(req.body);
+    const newUser = await User.create(userData);
     
     // Remove password from response
     newUser.password = undefined;
@@ -207,6 +199,7 @@ exports.deleteUser = async (req, res) => {
     
     res.status(204).json({
       status: 'success',
+      message: 'User deleted successfully',
       data: null
     });
   } catch (err) {
