@@ -1,10 +1,9 @@
 const express = require('express');
+const { DiariesCreate } = require('../Controller/DiariesController');
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  res.send('Diaries Router');
-});
+router.post('/',DiariesCreate);
 
 
 
