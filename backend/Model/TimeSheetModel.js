@@ -1,36 +1,33 @@
 const mongoose =require("mongoose")
 
 
-
-const ProjectsSchema = new mongoose.Schema({
-    projectName:{
-        type:String,
-        required:true,
-    },
-    assignedTo:{
-        type:String,
-        required:true,
-    },
-    startDate:{
+const TimeSheetSchema = new mongoose.Schema({
+    date:{
         type:Date,
         required:true,
     },
-    endDate:{
-        type:Date,
+    worker:{
+        type:String,
+        required:true,
+    },
+    project:{
+        type:String,
+        required:true,
+    },
+    hoursWorked:{
+        type:String,
+        required:true,
+    },
+    Overtime:{
+        type:String,
         required:true,
     },
     status:{
         type:String,
         required:true,
     },
-    priority:{
-        type:String,
-        required:true,
-    },
-    description:{
-        type:String,
-        required:true,
-    },
+},{
+    timestamps:true,
 })
 
-module.exports =mongoose.model('Projects',ProjectsSchema)
+module.exports = mongoose.model('TimeSheet',TimeSheetSchema)

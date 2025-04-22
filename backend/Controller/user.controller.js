@@ -1,9 +1,9 @@
 // controllers/userController.js
-const User  = require('../../Model/user.model');
+const User  = require('../Model/user.model');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const { cloudinary } = require('../../Config/cloudinary_config');
+const { cloudinary } = require('../Config/cloudinary_config');
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, '../public/img/users');
