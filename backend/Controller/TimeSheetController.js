@@ -27,4 +27,57 @@ const TimeSheetCreate=asyncHandler(async(req,res) => {
 
   
 
+  
+  //GET SINGLE AllProjects
+  //METHOD:GET
+  const AllTimeSheet = async (req, res) => {
+      const AllTimeSheet = await TimeSheet.find()
+      if (AllTimeSheet === null) {
+        res.status(404)
+        throw new Error("Categories Not Found")
+      }
+      res.json(AllTimeSheet)
+    }
+    
+  
+  
+      //GET SINGLE DeleteProjects
+  //METHOD:DELETE
+  const deleteTimeSheet = async (req, res) => {
+      let deleteTimeSheetID = req.params.id
+      if (deleteTimeSheet) {
+        const deleteTimeSheet = await TimeSheet.findByIdAndDelete(deleteTimeSheetID, req.body);
+        res.status(200).json("Delete TimeSheet Successfully")
+      } else {
+        res.status(400).json({ message: "Not Delete TimeSheet" })
+      }
+    }
+    
+  
+    //GET SINGLE ProjectsUpdate
+  //METHOD:PUT
+  const UpdateTimeSheet = async (req, res) => {
+      if (UpdateTimeSheet) {
+          const UpdateTimeSheet = await TimeSheet.findByIdAndUpdate(req.params.id, req.body);
+          res.status(200).json(UpdateTimeSheet)
+      } else {
+          res.status(400).json({ message: "Not Update projects" })
+      }
+  
+  }
+  
+  
+  //METHOD:Single
+  //TYPE:PUBLIC
+  const SingleTimeSheet=async(req,res)=>{
+      try {
+          const SingleTimeSheet= await TimeSheet.findById(req.params.id);
+          res.status(200).json(SingleTimeSheet)
+      } catch (error) {
+          res.status(404).json({msg:"Can t Find Projects"} )
+      }
+  }
+  
+
+
   module.exports = {TimeSheetCreate,AllTimeSheet,deleteTimeSheet,UpdateTimeSheet,SingleTimeSheet};

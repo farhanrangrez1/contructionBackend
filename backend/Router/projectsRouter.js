@@ -13,6 +13,4 @@ router.delete('/:id',deleteprojects)
 
 router.put('/:id',projectsUpdate)
 
-
-
 module.exports = router 

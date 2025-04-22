@@ -25,8 +25,6 @@ const ProjectsCreate = asyncHandler(async (req, res) => {
 });
 
 
-
-
 //GET SINGLE AllProjects
 //METHOD:GET
 const Allprojects = async (req, res) => {

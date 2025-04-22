@@ -47,7 +47,7 @@ const DiariesCreate=asyncHandler(async(req, res) => {
       let deleteDiariesID = req.params.id
       if (deleteDiaries) {
         const deleteDiaries = await Diaries.findByIdAndDelete(deleteDiariesID, req.body);
-        res.status(200).json("Delete Projects Successfully")
+        res.status(200).json("Delete Diaries Successfully")
       } else {
         res.status(400).json({ message: "Not Delete project" })
       }
@@ -61,7 +61,7 @@ const DiariesCreate=asyncHandler(async(req, res) => {
           const UpdateDiaries = await Diaries.findByIdAndUpdate(req.params.id, req.body);
           res.status(200).json(UpdateDiaries)
       } else {
-          res.status(400).json({ message: "Not Update projects" })
+          res.status(400).json({ message: "Not Update Diaries" })
       }
   
   }
@@ -74,7 +74,7 @@ const DiariesCreate=asyncHandler(async(req, res) => {
           const SingleDiaries= await Diaries.findById(req.params.id);
           res.status(200).json(SingleDiaries)
       } catch (error) {
-          res.status(404).json({msg:"Can t Find Projects"} )
+          res.status(404).json({msg:"Can t Find Diaries"} )
       }
   }
   
