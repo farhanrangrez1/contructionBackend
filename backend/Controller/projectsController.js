@@ -1,4 +1,4 @@
-const Projects = require('../../Model/Projects/projectsModel');
+const Projects = require('../Model/projectsModel');
 const asyncHandler = require("express-async-handler");
 
 const ProjectsCreate = asyncHandler(async (req, res) => {
