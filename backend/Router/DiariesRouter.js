@@ -11,10 +11,6 @@ router.get('/:id',SingleDiaries)
 
 router.delete('/:id',deleteDiaries)
 
-router.put('/:id',UpdateDiaries
-
-
-  
-)
+router.put('/:id',UpdateDiaries)
 
 module.exports = router;
