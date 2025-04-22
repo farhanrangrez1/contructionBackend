@@ -80,4 +80,4 @@ const DiariesCreate=asyncHandler(async(req, res) => {
   
 
 
-  module.exports = {DiariesCreate,AllDiaries}
+  module.exports = {DiariesCreate,AllDiaries,deleteDiaries,UpdateDiaries,SingleDiaries};
