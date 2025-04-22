@@ -1,7 +1,11 @@
 const { config } = require('dotenv');
 const express = require('express');
 const { DBconnect } = require('./Config/db_config');
+const path = require('path');
 const colors=require('colors')
+
+//Routes
+const userRoutes = require('./Router/User/user')
 require("dotenv").config()
 
 const app =express()
@@ -14,6 +18,12 @@ app.post('/',(req,res)=>{
 })
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+//User Routes
+
+
+app.use('/api/users', userRoutes);
 
 // Projects Router
 app.use('/api/projects',require('./Router/Projects/projectsRouter'))
