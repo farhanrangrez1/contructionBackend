@@ -1,7 +1,7 @@
 const express = require('express');
 const { DBconnect } = require('./Config/db_config');
 const colors=require('colors')
-const cors  =require('cors');
+const cors = require('cors');
 require("dotenv").config()
 
 const routerapi = require('./routerapi') 

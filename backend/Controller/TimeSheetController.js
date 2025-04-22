@@ -1,23 +1,23 @@
 const asyncHandler = require("express-async-handler");
-const Diaries = require("../Model/DiariesModel");
+const TimeSheet = require("../Model/TimeSheetModel");
 
 
-const DiariesCreate=asyncHandler(async(req, res) => {
+const TimeSheetCreate=asyncHandler(async(req, res) => {
     console.log("Request Body:", req.body);
   
-    const { date, projectName, supervisorName, weather, workPerformed, issuesDelays } = req.body;
+    const { date, worker, project, hoursWorked, Overtime, status } = req.body;
 
-    if (!date || !projectName || !supervisorName || !weather || !workPerformed || !issuesDelays) {
+    if (!date || !worker || !project || !hoursWorked || !Overtime || !status) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const newDiaries = await Diaries.create({
+    const newDiaries = await TimeSheet.create({
         date,
-        projectName,
-        supervisorName,
-        weather,
-        workPerformed,
-        issuesDelays,
+        worker,
+        project,
+        hoursWorked,
+        Overtime,
+        status,
     });
 
     res.status(201).json( newDiaries );
@@ -30,36 +30,36 @@ const DiariesCreate=asyncHandler(async(req, res) => {
   
   //GET SINGLE AllProjects
   //METHOD:GET
-  const AllDiaries = async (req, res) => {
-      const AllDiaries = await Diaries.find()
-      if (AllDiaries === null) {
+  const AllTimeSheet = async (req, res) => {
+      const AllTimeSheet = await TimeSheet.find()
+      if (AllTimeSheet === null) {
         res.status(404)
         throw new Error("Categories Not Found")
       }
-      res.json(AllDiaries)
+      res.json(AllTimeSheet)
     }
     
   
   
       //GET SINGLE DeleteProjects
   //METHOD:DELETE
-  const deleteDiaries = async (req, res) => {
-      let deleteDiariesID = req.params.id
-      if (deleteDiaries) {
-        const deleteDiaries = await Diaries.findByIdAndDelete(deleteDiariesID, req.body);
-        res.status(200).json("Delete Projects Successfully")
+  const deleteTimeSheet = async (req, res) => {
+      let deleteTimeSheetID = req.params.id
+      if (deleteTimeSheet) {
+        const deleteTimeSheet = await TimeSheet.findByIdAndDelete(deleteTimeSheetID, req.body);
+        res.status(200).json("Delete TimeSheet Successfully")
       } else {
-        res.status(400).json({ message: "Not Delete project" })
+        res.status(400).json({ message: "Not Delete TimeSheet" })
       }
     }
     
   
     //GET SINGLE ProjectsUpdate
   //METHOD:PUT
-  const UpdateDiaries = async (req, res) => {
-      if (UpdateDiaries) {
-          const UpdateDiaries = await Diaries.findByIdAndUpdate(req.params.id, req.body);
-          res.status(200).json(UpdateDiaries)
+  const UpdateTimeSheet = async (req, res) => {
+      if (UpdateTimeSheet) {
+          const UpdateTimeSheet = await TimeSheet.findByIdAndUpdate(req.params.id, req.body);
+          res.status(200).json(UpdateTimeSheet)
       } else {
           res.status(400).json({ message: "Not Update projects" })
       }
@@ -69,10 +69,10 @@ const DiariesCreate=asyncHandler(async(req, res) => {
   
   //METHOD:Single
   //TYPE:PUBLIC
-  const SingleDiaries=async(req,res)=>{
+  const SingleTimeSheet=async(req,res)=>{
       try {
-          const SingleDiaries= await Diaries.findById(req.params.id);
-          res.status(200).json(SingleDiaries)
+          const SingleTimeSheet= await TimeSheet.findById(req.params.id);
+          res.status(200).json(SingleTimeSheet)
       } catch (error) {
           res.status(404).json({msg:"Can t Find Projects"} )
       }
@@ -80,4 +80,4 @@ const DiariesCreate=asyncHandler(async(req, res) => {
   
 
 
-  module.exports = {DiariesCreate,AllDiaries,deleteDiaries,UpdateDiaries,SingleDiaries};
+  module.exports = {TimeSheetCreate,AllTimeSheet,deleteTimeSheet,UpdateTimeSheet,SingleTimeSheet};
