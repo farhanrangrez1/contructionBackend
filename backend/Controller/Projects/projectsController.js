@@ -4,9 +4,9 @@ const asyncHandler = require("express-async-handler");
 const ProjectsCreate = asyncHandler(async (req, res) => {
     console.log("Request Body:", req.body);
 
-    const { name, assignedTo, startDate, endDate, status, priority, description } = req.body;
+    const { name, assignedTo, startDate, endDate, status, priority,Progress, description } = req.body;
 
-    if (!name || !assignedTo || !startDate || !endDate || !status || !priority || !description) {
+    if (!name || !assignedTo || !startDate || !endDate || !status || !priority || !Progress || !description) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -17,6 +17,7 @@ const ProjectsCreate = asyncHandler(async (req, res) => {
         endDate,
         status,
         priority,
+        Progress,
         description
     });
 
@@ -42,8 +43,9 @@ const Allprojects = async (req, res) => {
     //GET SINGLE DeleteProjects
 //METHOD:DELETE
 const deleteprojects = async (req, res) => {
+    let deleteprojectsID = req.params.id
     if (deleteprojects) {
-      const deleteprojects = await Projects.findByIdAndDelete(req.params.id, req.body);
+      const deleteprojects = await Projects.findByIdAndDelete(deleteprojectsID, req.body);
       res.status(200).json("Delete Projects Successfully")
     } else {
       res.status(400).json({ message: "Not Delete project" })

@@ -31,6 +31,12 @@ const ProjectsSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    Progress:{
+        type:String,
+        required:true,
+    },
+},{
+timeseriestamps:true,
 })
 
 module.exports =mongoose.model('Projects',ProjectsSchema)
