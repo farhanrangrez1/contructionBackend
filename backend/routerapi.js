@@ -20,5 +20,6 @@ routerapi.use('/api/diaries', require('./Router/DiariesRouter'));
 routerapi.use('/api/timesheet', require('./Router/TimeSheetRouter'));
 // Swms
 routerapi.use('/api/swms', require('./Router/SwmsRouter'));
-
+//ITPs
+routerapi.use('/api/itps', require('./Router/ITPsRouter'));
 module.exports = routerapi

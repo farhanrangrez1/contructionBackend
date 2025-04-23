@@ -1,33 +1,44 @@
 const asyncHandler = require("express-async-handler");
 const Swms=require("../Model/SwmsModel")
 
-const SwmsCreate =asyncHandler(async(req,res) => {
+const SwmsCreate = asyncHandler(async (req, res) => {
+  const {
+    title,
+    project,
+    workArea,
+    description,
+    hazardsandControls,
+    ppeRequirements,
+    requiredPermits
+  } = req.body;
+
+  if (
+    !title ||
+    !project ||
+    !workArea ||
+    !description ||
+    !Array.isArray(hazardsandControls) || hazardsandControls.length === 0 ||
+    !ppeRequirements ||
+    !requiredPermits
+  ) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
+
+  const newSwms = await Swms.create({
+    title,
+    project,
+    workArea,
+    description,
+    hazardsandControls,
+    ppeRequirements,
+    requiredPermits
+  });
+
+  res.status(201).json(newSwms);
+});
+
+
   
-    const { title,project, workArea, descripation, hazarsDescription, riskLevel, controlMeasures,ppeRequirements, requiredPermits} = req.body;
-
-    if (!title || !project || !workArea || !descripation || !hazarsDescription || !riskLevel || !controlMeasures || !ppeRequirements || !requiredPermits) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const newDiaries = await Swms.create({
-        title,
-        project,
-        workArea,
-        descripation,
-        hazarsDescription,
-        riskLevel,
-        controlMeasures,
-        ppeRequirements,
-        requiredPermits,
-    });
-
-    res.status(201).json( newDiaries );
-
-    res.send('Diaries Router');
-  })
-
-  
-
   
   //GET SINGLE AllSwms
   //METHOD:GET
