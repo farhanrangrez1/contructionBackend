@@ -57,20 +57,39 @@ const DiariesCreate=asyncHandler(async(req, res) => {
     //GET SINGLE ProjectsUpdate
   //METHOD:PUT
   const UpdateDiaries = async (req, res) => {
-      if (UpdateDiaries) {
-        const { date, projectName, supervisorName, weather, workPerformed, issuesDelays } = req.body;
-    
-        if (!date || !projectName || !supervisorName || !weather || !workPerformed || !issuesDelays) {
-            return res.status(400).json({ message: 'All fields are required' });
+    try {
+      const allowedFields = [
+        'date',
+        'projectName',
+        'supervisorName',
+        'weather',
+        'workPerformed',
+        'issuesDelays'
+      ];
+      const updateData = {};
+      allowedFields.forEach(field => {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
         }
-    
-          const UpdateDiaries = await Diaries.findByIdAndUpdate(req.params.id, req.body);
-          res.status(200).json(UpdateDiaries)
-      } else {
-          res.status(400).json({ message: "Not Update Diaries" })
+      });
+
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: 'At least one field must be provided for update' });
       }
-  
-  }
+      const updatedDiary = await Diaries.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        { new: true }
+      );
+      if (!updatedDiary) {
+        return res.status(404).json({ message: 'Diary not found' });
+      }
+      res.status(200).json(updatedDiary);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error });
+    }
+  };
   
   
   //METHOD:Single

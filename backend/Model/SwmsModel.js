@@ -42,4 +42,4 @@ const SwmsSchema = new mongoose.Schema({
     timestamps:true,
 })
 
-module.exports = mongoose.model('SWMS',SwmsSchema)
+module.exports = mongoose.model('Swms',SwmsSchema)

@@ -57,19 +57,45 @@ const TimeSheetCreate=asyncHandler(async(req,res) => {
     //GET SINGLE ProjectsUpdate
   //METHOD:PUT
   const UpdateTimeSheet = async (req, res) => {
-      if (UpdateTimeSheet) {
-        const { date, worker, project, hoursWorked, Overtime, status } = req.body;
-
-    if (!date || !worker || !project || !hoursWorked || !Overtime || !status) {
-        return res.status(400).json({ message: 'All fields are required' });
-    }
-          const UpdateTimeSheet = await TimeSheet.findByIdAndUpdate(req.params.id, req.body);
-          res.status(200).json(UpdateTimeSheet)
-      } else {
-          res.status(400).json({ message: "Not Update projects" })
+    try {
+      const allowedFields = [
+        'date',
+        'worker',
+        'project',
+        'hoursWorked',
+        'Overtime',
+        'status'
+      ];
+  
+      const updateData = {};
+  
+      allowedFields.forEach(field => {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
+        }
+      });
+  
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: 'At least one field must be provided for update' });
       }
   
-  }
+      const updatedTimeSheet = await TimeSheet.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        { new: true }
+      );
+  
+      if (!updatedTimeSheet) {
+        return res.status(404).json({ message: 'Timesheet not found' });
+      }
+  
+      res.status(200).json(updatedTimeSheet);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error });
+    }
+  };
+  
   
   
   //METHOD:Single

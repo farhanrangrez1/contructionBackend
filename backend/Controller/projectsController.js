@@ -54,21 +54,42 @@ const deleteprojects = async (req, res) => {
   //GET SINGLE ProjectsUpdate
 //METHOD:PUT
 const projectsUpdate = async (req, res) => {
-    if (projectsUpdate) {
-        
-    const { name, assignedTo, startDate, endDate, status, priority,Progress, description } = req.body;
-
-    if (!name || !assignedTo || !startDate || !endDate || !status || !priority || !Progress || !description) {
-        return res.status(400).json({ message: 'All fields are required' });
+    try {
+      const allowedFields = [
+        'name',
+        'assignedTo',
+        'startDate',
+        'endDate',
+        'status',
+        'priority',
+        'Progress',
+        'description'
+      ];
+      const updateData = {};
+      allowedFields.forEach(field => {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
+        }
+      });
+  
+      if (Object.keys(updateData).length === 0) {
+        return res.status(400).json({ message: 'At least one field must be provided for update' });
+      }
+      const updatedProject = await Projects.findByIdAndUpdate(
+        req.params.id,
+        updateData,
+        { new: true }
+      );
+      if (!updatedProject) {
+        return res.status(404).json({ message: 'Project not found' });
+      }
+      res.status(200).json(updatedProject);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error });
     }
-
-        const projectsUpdate = await Projects.findByIdAndUpdate(req.params.id, req.body);
-        res.status(200).json(projectsUpdate)
-    } else {
-        res.status(400).json({ message: "Not Update projects" })
-    }
-
-}
+  };
+  
 
 
 
