@@ -22,4 +22,7 @@ routerapi.use('/api/timesheet', require('./Router/TimeSheetRouter'));
 routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 //ITPs
 routerapi.use('/api/itps', require('./Router/ITPsRouter'));
+// induction
+routerapi.use('/api/induction', require('./Router/inductionRouter'));
+
 module.exports = routerapi
