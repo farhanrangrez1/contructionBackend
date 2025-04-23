@@ -21,4 +21,7 @@ routerapi.use('/api/timesheet', require('./Router/TimeSheetRouter'));
 // Swms
 routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 
+routerapi.use('/api/induction', require('./Router/inductionRouter'));
+
+
 module.exports = routerapi
