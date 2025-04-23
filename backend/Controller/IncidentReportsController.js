@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const TimeSheet = require("../Model/TimeSheetModel");
 
 
-const TimeSheetCreate=asyncHandler(async(req,res) => {
+const IncidentReportsCreate=asyncHandler(async(req,res) => {
   
     const { date, worker, project, hoursWorked, Overtime, status } = req.body;
 
@@ -29,7 +29,7 @@ const TimeSheetCreate=asyncHandler(async(req,res) => {
   
   //GET SINGLE AllProjects
   //METHOD:GET
-  const AllTimeSheet = async (req, res) => {
+  const AllIncidentReports = async (req, res) => {
       const AllTimeSheet = await TimeSheet.find()
       if (AllTimeSheet === null) {
         res.status(404)

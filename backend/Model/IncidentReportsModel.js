@@ -1,45 +1,42 @@
 const mongoose =require("mongoose")
 
 
-const SwmsSchema = new mongoose.Schema({
-   title:{
-        type:String,
-        required:true,
-    },  
-    project:{
+const IncidentReportsSchema = new mongoose.Schema({
+    IncidentType:{
         type:String,
         required:true,
     },
-    workArea:{
+    date:{
+        type:Date,
+        required:true,
+    },
+    location:{
         type:String,
         required:true,
     },
-    descripation:{
+    Description:{
         type:String,
         required:true,
     },
-    hazarsDescription:{
+    severityLevel:{
         type:String,
         required:true,
     },
-    riskLevel:{
+    witnesses:{
         type:String,
         required:true,
     },
-    controlMeasures:{
+    immediateActionsTaken:{
+        type:String,
+        required:true,
+    }, 
+    uploadEvidence:{
         type:String,
         required:true,
     },
-    ppeRequirements:{
-        type:String,
-        required:true,
-    },
-    requiredPermits:{
-        type:String,
-        required:true,
-    },
+    
 },{
     timestamps:true,
 })
 
-module.exports = mongoose.model('SWMS',SwmsSchema)
+module.exports = mongoose.model('IncidentReports',IncidentReportsSchema)

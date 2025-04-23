@@ -2,7 +2,6 @@ const Projects = require('../Model/projectsModel');
 const asyncHandler = require("express-async-handler");
 
 const ProjectsCreate = asyncHandler(async (req, res) => {
-    console.log("Request Body:", req.body);
 
     const { name, assignedTo, startDate, endDate, status, priority,Progress, description } = req.body;
 

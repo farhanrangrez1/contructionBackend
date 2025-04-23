@@ -3,7 +3,6 @@ const Diaries = require("../Model/DiariesModel");
 
 
 const DiariesCreate=asyncHandler(async(req, res) => {
-    console.log("Request Body:", req.body);
   
     const { date, projectName, supervisorName, weather, workPerformed, issuesDelays } = req.body;
 

@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler");
 const Swms=require("../Model/SwmsModel")
 
 const SwmsCreate =asyncHandler(async(req,res) => {
-    console.log("Request Body:", req.body);
   
     const { title,project, workArea, descripation, hazarsDescription, riskLevel, controlMeasures,ppeRequirements, requiredPermits} = req.body;
 
