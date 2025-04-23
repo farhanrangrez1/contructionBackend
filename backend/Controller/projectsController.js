@@ -55,6 +55,13 @@ const deleteprojects = async (req, res) => {
 //METHOD:PUT
 const projectsUpdate = async (req, res) => {
     if (projectsUpdate) {
+        
+    const { name, assignedTo, startDate, endDate, status, priority,Progress, description } = req.body;
+
+    if (!name || !assignedTo || !startDate || !endDate || !status || !priority || !Progress || !description) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
+
         const projectsUpdate = await Projects.findByIdAndUpdate(req.params.id, req.body);
         res.status(200).json(projectsUpdate)
     } else {

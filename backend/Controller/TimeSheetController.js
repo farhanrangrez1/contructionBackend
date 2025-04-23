@@ -58,6 +58,11 @@ const TimeSheetCreate=asyncHandler(async(req,res) => {
   //METHOD:PUT
   const UpdateTimeSheet = async (req, res) => {
       if (UpdateTimeSheet) {
+        const { date, worker, project, hoursWorked, Overtime, status } = req.body;
+
+    if (!date || !worker || !project || !hoursWorked || !Overtime || !status) {
+        return res.status(400).json({ message: 'All fields are required' });
+    }
           const UpdateTimeSheet = await TimeSheet.findByIdAndUpdate(req.params.id, req.body);
           res.status(200).json(UpdateTimeSheet)
       } else {

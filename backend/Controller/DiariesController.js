@@ -58,6 +58,12 @@ const DiariesCreate=asyncHandler(async(req, res) => {
   //METHOD:PUT
   const UpdateDiaries = async (req, res) => {
       if (UpdateDiaries) {
+        const { date, projectName, supervisorName, weather, workPerformed, issuesDelays } = req.body;
+    
+        if (!date || !projectName || !supervisorName || !weather || !workPerformed || !issuesDelays) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+    
           const UpdateDiaries = await Diaries.findByIdAndUpdate(req.params.id, req.body);
           res.status(200).json(UpdateDiaries)
       } else {
