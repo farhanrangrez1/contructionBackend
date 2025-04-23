@@ -96,7 +96,6 @@ const IncidentReportsCreate=asyncHandler(async(req,res) => {
   };
   
   
-  
   //METHOD:Single
   //TYPE:PUBLIC
   const SingleTimeSheet=async(req,res)=>{
