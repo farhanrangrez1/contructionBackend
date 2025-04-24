@@ -11,7 +11,6 @@ cloudinary.config({
     api_secret: 'p12EKWICdyHWx8LcihuWYqIruWQ'
   });
 
-
   const createInduction = async (req, res) => {
     const {
       fullName,
@@ -39,18 +38,13 @@ cloudinary.config({
   
     try {
       let fileUrl = '';
-  
-      // Check if an image file is uploaded
       if (req.files && req.files.image) {
         const imageFile = req.files.image;
-  
-        // Upload the image to Cloudinary
         const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath, {
-          folder: 'uploads', // Specify the folder in Cloudinary
+          folder: 'uploads', 
           resource_type: 'image',
         });
   
-        // Check if the upload was successful and retrieve the URL
         if (uploadResult && uploadResult.secure_url) {
           fileUrl = uploadResult.secure_url;
         } else {
@@ -59,8 +53,6 @@ cloudinary.config({
       } else {
         console.log('No image file uploaded.');
       }
-  
-      // Create a new Induction record
       const newInduction = new Induction({
         fullName,
         contactNumber,
@@ -71,13 +63,9 @@ cloudinary.config({
         inductionDate: new Date(inductionDate),
         siteAccessHours,
         acknowledgements,
-        image: fileUrl ? [fileUrl] : [], // Store the file URL if uploaded
+        image: fileUrl ? [fileUrl] : [], 
       });
-  
-      // Save the new induction record to the database
       await newInduction.save();
-  
-      // Respond with the created induction data
       res.status(201).json({
         success: true,
         message: 'Induction created successfully',
