@@ -1,16 +1,20 @@
 const express = require('express');
-const { InductionCreate } = require('../Controller/InductionController');
+const { createInduction, getAllInduction, getInductionById, updateInduction, deleteInduction, getInductions } = require('../Controller/InductionController');
 
 const router = express.Router();
 
-router.post('/',InductionCreate);
+router.post('/',createInduction);
 
-// router.get('/',AllDiaries)
+router.get('/',getAllInduction);
 
-// router.get('/:id',SingleDiaries)
+router.get('/:id',getInductionById)
 
-// router.delete('/:id',deleteDiaries)
+router.patch('/:id',updateInduction)
 
-// router.put('/:id',UpdateDiaries)
+router.delete('/:id',deleteInduction)
+
+router.get('/',getInductions)
+
+
 
 module.exports = router;

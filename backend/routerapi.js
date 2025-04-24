@@ -24,10 +24,6 @@ routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 routerapi.use('/api/itps', require('./Router/ITPsRouter'));
 // induction
 routerapi.use('/api/induction', require('./Router/inductionRouter'));
-// Checklists
-routerapi.use('/api/checklists', require('./Router/ChecklistsRouter'));
-// DefectLists
-routerapi.use('/api/defectlists', require('./Router/DefectListsRouter'));
-// PlantMachinery
-routerapi.use('/api/plantmachinery', require('./Router/PlantMachineryRouter'));
+
+
 module.exports = routerapi
