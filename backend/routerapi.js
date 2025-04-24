@@ -23,5 +23,11 @@ routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 
 routerapi.use('/api/induction', require('./Router/inductionRouter'));
 
+routerapi.use('/api/incident', require('./Router/incidentRouter'));
+
+routerapi.use('/api/siteEntry', require('./Router/siteEntryRouter'));
+
+routerapi.use('/api/siteReview', require('./Router/siteReviewRouter'));
+
 
 module.exports = routerapi
