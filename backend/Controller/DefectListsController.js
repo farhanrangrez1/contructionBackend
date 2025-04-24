@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const ITPs = require('../Model/ITPsModel');
+const Defect = require('../Model/DefectListsModel');
 
 
 const Induction = require("../Model/InductionModel");
@@ -11,14 +11,19 @@ cloudinary.config({
     api_secret: 'p12EKWICdyHWx8LcihuWYqIruWQ'
 });
 
-const ITPcCreate = asyncHandler(async (req, res) => {
+const DefectCreate = asyncHandler(async (req, res) => {
     let {
-      projectName,
-      InspectionType,
-      Inspector,
-      Date,
-      additionalNotes,
+        title,
+        project,
+        location,
+        category,
+        assigned,
+        priority,
+        description,
+        status,
+        comments,
     } = req.body;
+    
   
     let InspectionItems = [];
   
@@ -50,7 +55,7 @@ const ITPcCreate = asyncHandler(async (req, res) => {
   
         for (const file of files) {
           const uploadResult = await cloudinary.uploader.upload(file.tempFilePath, {
-            folder: "itp_uploads",
+            folder: "Defect_uploads",
             resource_type: "image",
           });
   
@@ -60,72 +65,80 @@ const ITPcCreate = asyncHandler(async (req, res) => {
         }
       }
   
-      // Create and save ITP record
-      const newITP = new ITPs({
-        projectName,
-        InspectionType,
-        Inspector,
-        Date,
-        InspectionItems,
-        additionalNotes,
+      // Create and save Defect record
+      const newDefect = new Defect({
+        title,
+        project,
+        location,
+        category,
+        assigned,
+        priority,
+        description,
+        status,
+        comments,
         image: imageUrls,
-      });
-  
-      await newITP.save();
-  
+    });
+    
+      await newDefect.save();
       res.status(201).json({
         success: true,
-        message: "ITP created successfully",
-        itp: newITP,
+        message: "Defect created successfully",
+        Defect: newDefect,
       });
     } catch (error) {
-      console.error("Error creating ITP:", error);
+      console.error("Error creating Defect:", error);
       res.status(500).json({
         success: false,
-        message: "An error occurred while creating the ITP",
+        message: "An error occurred while creating the Defect",
         error: error.message,
       });
     }
   });
-   
 
-//GET SINGLE AllITPs
-//METHOD:GET
-const AllITPc = async (req, res) => {
-    const AllITPc = await ITPs.find()
-    if (AllITPc === null) {
+
+
+
+  
+  //GET SINGLE AllProjects
+  //METHOD:GET
+  const AllDefect = async (req, res) => {
+      const AllDefect = await Defect.find()
+      if (AllDefect === null) {
         res.status(404)
         throw new Error("Categories Not Found")
+      }
+      res.json(AllDefect)
     }
-    res.json(AllITPc)
-}
-
-
-
-//GET SINGLE DeletePITPs
-//METHOD:DELETE
-const deleteITPc = async (req, res) => {
-    let deleteITPcID = req.params.id
-    if (deleteITPc) {
-        const deleteITPc = await ITPs.findByIdAndDelete(deleteITPcID, req.body);
-        res.status(200).json("Delete ITPs Successfully")
-    } else {
-        res.status(400).json({ message: "Not Delete ITPs" })
+    
+  
+  
+      //GET SINGLE DeleteProjects
+  //METHOD:DELETE
+  const deleteDefect = async (req, res) => {
+      let deleteDefectID = req.params.id
+      if (deleteDefect) {
+        const deleteDefect = await Defect.findByIdAndDelete(deleteDefectID, req.body);
+        res.status(200).json("Delete Defect Successfully")
+      } else {
+        res.status(400).json({ message: "Not Delete project" })
+      }
     }
-}
-
-
-//GET SINGLE ITPsUpdate
-//METHOD:PUT
-const UpdateITPc = asyncHandler(async (req, res) => {
+    
+  
+    //GET SINGLE ProjectsUpdate
+  //METHOD:PUT
+const UpdateDefect = asyncHandler(async (req, res) => {
     try {
       const allowedFields = [
-        'projectName',
-        'InspectionType',
-        'Inspector',
-        'Date',
-        'InspectionItems',
-        'additionalNotes',
+        'title',
+        'project',
+        'location',
+        'category',
+        'assigned',
+        'priority',
+        'description',
+        'status',
+        'comments',
       ];
   
       const updateData = {}; 
@@ -175,7 +188,7 @@ const UpdateITPc = asyncHandler(async (req, res) => {
       }
   
       // Find and update
-      const updatedITP = await ITPs.findByIdAndUpdate(req.params.id, updateData, {
+      const updatedITP = await Defect.findByIdAndUpdate(req.params.id, updateData, {
         new: true,
       });
       if (!updatedITP) {
@@ -192,19 +205,21 @@ const UpdateITPc = asyncHandler(async (req, res) => {
     }
   });
   
+  
+  //METHOD:Single
+  //TYPE:PUBLIC
+  const SingleDefect=async(req,res)=>{
+      try {
+          const SingleDefect= await Defect.findById(req.params.id);
+          res.status(200).json(SingleDefect)
+      } catch (error) {
+          res.status(404).json({msg:"Can t Find Diaries"} )
+      }
+  }
 
 
-//METHOD:Single
-//TYPE:PUBLIC
-const SingleITPc = async (req, res) => {
-    try {
-        const SingleITPc = await ITPs.findById(req.params.id);
-        res.status(200).json(SingleITPc)
-    } catch (error) {
-        res.status(404).json({ msg: "Can t Find Projects" })
-    }
-}
 
 
 
-module.exports = { ITPcCreate, AllITPc, deleteITPc, UpdateITPc, SingleITPc };
+
+  module.exports = {DefectCreate,AllDefect,deleteDefect,UpdateDefect,SingleDefect};

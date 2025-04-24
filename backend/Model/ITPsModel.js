@@ -3,7 +3,7 @@ const mongoose =require("mongoose")
 
 const ITPsSchema = new mongoose.Schema({
     projectName: { 
-      type: String, // Changed from Date to String
+      type: String,
       required: true,
     },
     InspectionType: {
