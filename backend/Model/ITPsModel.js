@@ -39,6 +39,18 @@ const ITPsSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    activity: {
+      type: String,
+      required: true,
+    },
+    criteria : {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
     image: [String],
   }, {
     timestamps: true,

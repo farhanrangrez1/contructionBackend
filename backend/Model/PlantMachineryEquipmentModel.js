@@ -1,7 +1,7 @@
 const mongoose =require("mongoose")
 
-const PlantMachinerySchema = new mongoose.Schema({
-    EquipmentID:{
+const PlantMachineryEquipmentSchema = new mongoose.Schema({
+    equipmentID:{
         type:String,
         required:true,
     },  
@@ -9,11 +9,11 @@ const PlantMachinerySchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    Type:{
+    type:{
         type:String,
         required:true,
     },
-    Location:{
+    location:{
         type:String,
         required:true,
     },
@@ -21,11 +21,11 @@ const PlantMachinerySchema = new mongoose.Schema({
         type:Date,
         required:true,
     },
-    PurchaseCost:{
+    purchaseCost:{
         type:String,
         required:true,
     },
-    Description:{
+    description:{
         type:String,
         required:true,
     },
@@ -36,4 +36,4 @@ const PlantMachinerySchema = new mongoose.Schema({
   
 
   
-module.exports = mongoose.model('PlantMachinery',PlantMachinerySchema)
+module.exports = mongoose.model('PlantMachineryEquipment',PlantMachineryEquipmentSchema)

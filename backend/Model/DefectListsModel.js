@@ -34,6 +34,10 @@ const DefectSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    date:{  
+        type:Date,
+        required:true,
+    },
     image: [String],
     comments:{
         type:String,

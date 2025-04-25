@@ -27,18 +27,26 @@ const ProjectsCreate = asyncHandler(async (req, res) => {
 //GET SINGLE AllProjects
 //METHOD:GET
 const Allprojects = async (req, res) => {
-    const Allprojects = await Projects.find()
-    if (Allprojects === null) {
-      res.status(404)
-      throw new Error("Categories Not Found")
+  try {
+    const allProjects = await Projects.find(); 
+    if (!allProjects || allProjects.length === 0) {
+      return res.status(404).json({ message: "No projects found" });
     }
-    res.json(Allprojects)
+    const modifiedProjects = allProjects.map(project => {
+      return {
+        ...project.toObject(),
+        assignedTo: project.assignedTo.toString(), 
+      };
+    });
+    res.json(modifiedProjects);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  
+};
 
 
     //GET SINGLE DeleteProjects
-//METHOD:DELETE
+    //METHOD:DELETE
 const deleteprojects = async (req, res) => {
     let deleteprojectsID = req.params.id
     if (deleteprojects) {
@@ -94,15 +102,58 @@ const projectsUpdate = async (req, res) => {
 
 //METHOD:Single
 //TYPE:PUBLIC
-const projectsSingle=async(req,res)=>{
-    try {
-        const projectsSingle= await Projects.findById(req.params.id);
-        res.status(200).json(projectsSingle)
-    } catch (error) {
-        res.status(404).json({msg:"Can t Find Projects"} )
+// const projectsSingle=async(req,res)=>{
+//     try {
+//         const projectsSingle= await Projects.findById(req.params.id);
+//         res.status(200).json(projectsSingle)
+//     } catch (error) {
+//         res.status(404).json({msg:"Can t Find Projects"} )
+//     }
+// }
+
+
+// METHOD: GET
+// ROUTE: /api/projects/assigned/:id
+// DESC: Get 10 projects assigned to a specific user
+const projectsSingle = async (req, res) => {
+  try {
+    const assignedUserId = req.params.id;
+
+    const projects = await Projects.find({ assignedTo: assignedUserId })
+      .limit(10)
+      .sort({ createdAt: -1 }); // latest first (optional)
+
+    if (!projects || projects.length === 0) {
+      return res.status(404).json({ message: "No projects found for this user" });
     }
-}
+
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
 
 
-module.exports = { ProjectsCreate,Allprojects,deleteprojects,projectsUpdate,projectsSingle };
+// METHOD: GET
+// ROUTE: /api/projects/by-user/:id
+const getProjectsByUser = async (req, res) => {
+  try {
+    const assignedUserId = req.params.id;
+
+    const projects = await Projects.find({ assignedTo: assignedUserId })
+      .sort({ createdAt: -1 }) // latest first
+      .limit(10);
+
+    if (!projects || projects.length === 0) {
+      return res.status(404).json({ message: "No projects found for this user" });
+    }
+
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+
+module.exports = { ProjectsCreate,Allprojects,deleteprojects,projectsUpdate,projectsSingle,getProjectsByUser };
 

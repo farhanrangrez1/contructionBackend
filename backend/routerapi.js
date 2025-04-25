@@ -24,6 +24,14 @@ routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 routerapi.use('/api/itps', require('./Router/ITPsRouter'));
 // induction
 routerapi.use('/api/induction', require('./Router/inductionRouter'));
-
-
+// Equipment
+routerapi.use('/api/equipment',require('./Router/PlantMachineryEquipmentRouter'))
+//plantmachinery
+routerapi.use('/api/plantmachinery', require('./Router/PlantMachineryRouter'));
+// Calendar
+routerapi.use('/api/calendar', require('./Router/CalendarRouter'));
+// defectlists
+routerapi.use('/api/defectlists', require('./Router/DefectListsRouter'));
+// checklists
+routerapi.use('/api/checklists', require('./Router/ChecklistsRouter'));
 module.exports = routerapi

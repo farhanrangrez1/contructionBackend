@@ -8,6 +8,7 @@ const ChecklistsCreate = asyncHandler(async (req, res) => {
     AssignTo,
     date,
     checklistItems,
+    status,
     additionalNotes
   } = req.body;
 
@@ -17,6 +18,7 @@ const ChecklistsCreate = asyncHandler(async (req, res) => {
     !AssignTo ||
     !date ||
     !checklistItems ||
+    !status ||
     !additionalNotes
   ) {
     return res.status(400).json({ message: 'All fields are required' });
@@ -28,6 +30,7 @@ const ChecklistsCreate = asyncHandler(async (req, res) => {
     AssignTo,
     date,
     checklistItems,
+    status,
     additionalNotes,
   });
 

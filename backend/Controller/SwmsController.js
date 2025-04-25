@@ -43,13 +43,17 @@ const SwmsCreate = asyncHandler(async (req, res) => {
   //GET SINGLE AllSwms
   //METHOD:GET
   const AllSwms = async (req, res) => {
-      const AllSwms = await Swms.find()
-      if (AllSwms === null) {
-        res.status(404)
-        throw new Error("Categories Not Found")
+    try {
+      const allSwms = await Swms.find().populate('project', 'name');
+      if (!allSwms) {
+        return res.status(404).json({ message: 'Categories Not Found' });
       }
-      res.json(AllSwms)
+      res.json(allSwms);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
+  };
+  
     
   
   

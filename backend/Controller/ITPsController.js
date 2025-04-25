@@ -18,6 +18,9 @@ const ITPcCreate = asyncHandler(async (req, res) => {
       Inspector,
       Date,
       additionalNotes,
+      activity,
+      criteria,
+      status
     } = req.body;
   
     let InspectionItems = [];
@@ -68,6 +71,9 @@ const ITPcCreate = asyncHandler(async (req, res) => {
         Date,
         InspectionItems,
         additionalNotes,
+        activity,
+        criteria,
+        status,
         image: imageUrls,
       });
   

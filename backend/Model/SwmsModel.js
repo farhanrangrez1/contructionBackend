@@ -1,8 +1,9 @@
 const mongoose =require("mongoose")
+const Project = require("../Model/projectsModel"); 
 
 const SwmsSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    project: { type: String, required: true },
+    project: { type: mongoose.Schema.Types.ObjectId, ref: 'Projects', required: true },
     workArea: { type: String, required: true },
     description: { type: String, required: true },
   
@@ -42,3 +43,4 @@ const SwmsSchema = new mongoose.Schema({
   
 
 module.exports = mongoose.model('SWMS',SwmsSchema)
+
