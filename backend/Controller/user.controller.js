@@ -1,31 +1,13 @@
-const User  = require('../Model/user.model');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
-//const { cloudinary } = require('../Config/cloudinary_config');
-
-const uploadsDir = path.join(__dirname, '../public/img/users');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+const User  = require('../Model/userModel');
 
 
-const multerStorage = multer.memoryStorage();
+const cloudinary = require('../Config/cloudinary');
 
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Not an image! Please upload only images.'), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter
+cloudinary.config({
+  cloud_name: 'dkqcqrrbp',
+  api_key: '418838712271323',
+  api_secret: 'p12EKWICdyHWx8LcihuWYqIruWQ'
 });
-
-exports.uploadUserPhoto = upload.single('profileImage');
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -48,46 +30,62 @@ exports.getAllUsers = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
+    // 1. Password confirmation check
     if (req.body.password !== req.body.passwordConfirm) {
       return res.status(400).json({
         status: 'fail',
-        message: 'Passwords do not match'
+        message: 'Passwords do not match',
       });
     }
-    
-    let profileImage = null;
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.buffer.toString('base64'), {
+
+    // 2. Upload profile image to Cloudinary if present
+    let profileImage = [];
+
+    if (req.files && req.files.image) {
+      const result = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
         folder: 'user_profiles',
-        resource_type: 'auto'
+        resource_type: 'image',
       });
       profileImage = result.secure_url;
-    } else if (req.body.profileImage) {
-      profileImage = req.body.profileImage;
     }
+
+    // 3. Dynamically handle permissions from form data
+    const permissionKeys = [
+      'viewProjectDetails',
+      'editProjectInformation',
+      'manageTeamMembers',
+      'accessFinancialData'
+    ];
     
-    const permissions = req.body.permissions || {
-      viewProjectDetails: false,
-      editProjectInformation: false,
-      manageTeamMembers: false,
-      accessFinancialData: false
-    };
-    
+    const permissions = {};
+    permissionKeys.forEach(key => {
+      permissions[key] = req.body[key] === 'true';
+    });
+
+    // 4. Construct user data
     const userData = {
-      ...req.body,
-      permissions,
-      profileImage
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+      role: req.body.role,
+      department: req.body.department,
+      profileImage,
+      permissions
     };
-    
+
+    // 5. Save user
     const newUser = await User.create(userData);
-    newUser.password = undefined;
-    
+    newUser.password = undefined; // Hide password in response
+
     res.status(201).json({
       status: 'success',
       data: {
         user: newUser
       }
     });
+
   } catch (err) {
     res.status(400).json({
       status: 'fail',
@@ -95,9 +93,6 @@ exports.createUser = async (req, res) => {
     });
   }
 };
-
-
-
 
 exports.getUser = async (req, res) => {
   try {
@@ -126,52 +121,80 @@ exports.getUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    if (req.body.password || req.body.passwordConfirm) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'This route is not for password updates. Please use /updatePassword.'
+    // 1. Prevent password updates through this route
+    // if (req.body.password || req.body.passwordConfirm) {
+    //   return res.status(400).json({
+    //     status: 'fail',
+    //     message: 'This route is not for password updates. Please use /updatePassword.',
+    //   });
+    // }
+
+    // 2. Upload profile image to Cloudinary if provided
+    let profileImage = req.body.profileImage || null; // Default to the current profileImage if no new image
+
+    if (req.files && req.files.image) {
+      const result = await cloudinary.uploader.upload(req.files.image.tempFilePath, {
+        folder: 'user_profiles',
+        resource_type: 'image',
       });
+      profileImage = result.secure_url;
     }
-    if (req.file) {
-      req.body.profileImage = req.file.filename;
-    }
-    if (req.body.viewProjectDetails !== undefined || 
+
+    // 3. Dynamically handle permissions from form data
+    if (req.body.viewProjectDetails !== undefined ||
         req.body.editProjectInformation !== undefined ||
         req.body.manageTeamMembers !== undefined ||
         req.body.accessFinancialData !== undefined) {
       
       req.body.permissions = {
-        viewProjectDetails: !!req.body.viewProjectDetails,
-        editProjectInformation: !!req.body.editProjectInformation,
-        manageTeamMembers: !!req.body.manageTeamMembers,
-        accessFinancialData: !!req.body.accessFinancialData
+        viewProjectDetails: req.body.viewProjectDetails === 'true',
+        editProjectInformation: req.body.editProjectInformation === 'true',
+        manageTeamMembers: req.body.manageTeamMembers === 'true',
+        accessFinancialData: req.body.accessFinancialData === 'true',
       };
     }
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+
+    // 4. Merge current profile image if no new one is uploaded and update user data
+    const userData = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      role: req.body.role,
+      department: req.body.department,
+      profileImage,
+      permissions: req.body.permissions || {},
+    };
+
+    // 5. Update user in the database
+    const user = await User.findByIdAndUpdate(req.params.id, userData, {
       new: true,
-      runValidators: true
+      runValidators: true,
     });
-    
+
+    // 6. If no user is found, return a 404 error
     if (!user) {
       return res.status(404).json({
         status: 'fail',
-        message: 'No user found with that ID'
+        message: 'No user found with that ID',
       });
     }
-    
+
+    // 7. Return the updated user data
     res.status(200).json({
       status: 'success',
       data: {
-        user
-      }
+        user,
+      },
     });
   } catch (err) {
     res.status(400).json({
       status: 'fail',
-      message: err.message
+      message: err.message,
     });
   }
 };
+
+
 
 exports.deleteUser = async (req, res) => {
   try {
@@ -196,3 +219,5 @@ exports.deleteUser = async (req, res) => {
     });
   }
 };
+
+

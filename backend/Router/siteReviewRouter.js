@@ -1,17 +1,17 @@
 const express=require('express');
-const { createSiteReview } = require('../Controller/siteReviewController');
+const { createSiteReview, getAllSiteReviews, getSiteReviewById, updateSiteReview, deleteSiteReview } = require('../Controller/siteReviewController');
 
 const router = express.Router()
 
 router.post('/',createSiteReview)
 
-// router.get('/',getAllSiteEntries)
+router.get('/',getAllSiteReviews)
 
-// router.get('/:id',getSiteEntryById)
+router.get('/:id',getSiteReviewById)
 
-// router.patch('/:id',updateSiteEntry)
+router.patch('/:id',updateSiteReview)
 
-// router.delete('/:id',deleteSiteEntry)
+router.delete('/:id',deleteSiteReview)
 
 
 

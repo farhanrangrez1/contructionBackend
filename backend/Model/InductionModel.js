@@ -10,13 +10,15 @@ const inductionSchema = new mongoose.Schema({
   siteLocation: { type: String, required: true },
   siteSupervisor: { type: String, required: true },
   inductionDate: { type: Date, required: true },
-  siteAccessHours: { type: String, required: true },
+  accessStartTime: { type: String },
+  accessEndTime: { type: String },
   acknowledgements: {
     siteSafetyPlan: { type: Boolean },
     complyOperatingHours: { type: Boolean },
     emergencyProcedures: { type: Boolean }
   },
-  image: []
-});
+  image: [],
+  
+}, { timestamps: true });
 
 module.exports = mongoose.model('Induction', inductionSchema);
