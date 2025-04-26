@@ -156,4 +156,3 @@ const getProjectsByUser = async (req, res) => {
 
 
 module.exports = { ProjectsCreate,Allprojects,deleteprojects,projectsUpdate,projectsSingle,getProjectsByUser };
-

@@ -1,65 +1,66 @@
 const asyncHandler = require("express-async-handler");
-const Checklists = require("../Model/ChecklistsModel");
+const Documents = require("../Model/DocumentsModel");
 
-const ChecklistsCreate = asyncHandler(async (req, res) => {
+const DocumentsCreate = asyncHandler(async (req, res) => {
   const {
-    checklistName,
-    project,
-    AssignTo,
-    date,
-    checklistItems,
+    folder,
+    documentName,
+    documentType,
+    assignTo,
+    dueDate,
+    submissionDate,
     status,
-    additionalNotes
+    comments
   } = req.body;
 
   if (
-    !checklistName ||
-    !project ||
-    !AssignTo ||
-    !date ||
-    !checklistItems ||
-    !status ||
-    !additionalNotes
+    !folder ||
+    !documentName ||
+    !documentType ||
+    !assignTo ||
+    !dueDate ||
+    !submissionDate ||
+    !status || 
+    !comments
   ) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  const newSwms = await Checklists.create({
-    checklistName,
-    project,
-    AssignTo,
-    date,
-    checklistItems,
+  const newSwms = await Documents.create({
+    folder,
+    documentName,
+    documentType,
+    assignTo,
+    dueDate,
+    submissionDate,
     status,
-    additionalNotes,
+    comments
   });
 
   res.status(201).json(newSwms);
 });
   
-  
-
 
   
   //GET SINGLE AllProjects
   //METHOD:GET
-  const AllChecklists = async (req, res) => {
-      const AllChecklists = await Checklists.find()
-      if (AllChecklists === null) {
+  const AllDocuments = async (req, res) => {
+      const AllDocuments = await Documents.find()
+      if (AllDocuments === null) {
         res.status(404)
         throw new Error("Categories Not Found")
       }
-      res.json(AllChecklists)
+      res.json(AllDocuments)
     }
     
   
   
       //GET SINGLE DeleteProjects
   //METHOD:DELETE
-  const deleteChecklists = async (req, res) => {
-      let deleteChecklistsID = req.params.id
-      if (deleteChecklists) {
-        const deleteChecklists = await Checklists.findByIdAndDelete(deleteChecklistsID, req.body);
+  const deleteDocuments = async (req, res) => {
+      let deleteDocumentsID = req.params.id
+      if (deleteDocuments) {
+        const deleteDocuments = await Documents.findByIdAndDelete(deleteDocumentsID, req.body);
         res.status(200).json("Delete Checklists Successfully")
       } else {
         res.status(400).json({ message: "Not Delete project" })
@@ -69,34 +70,41 @@ const ChecklistsCreate = asyncHandler(async (req, res) => {
   
     //GET SINGLE ProjectsUpdate
   //METHOD:PUT
-  const UpdateChecklists = async (req, res) => {
+  const UpdateDocuments = async (req, res) => {
     try {
       const allowedFields = [
-        'date',
-        'projectName',
-        'supervisorName',
-        'weather',
-        'workPerformed',
-        'issuesDelays'
+        'folder',
+        'documentName',
+        'documentType',
+        'assignTo',
+        'dueDate',
+        'submissionDate',
+        'status',
+        'comments'
       ];
-      const updateData = {};
+      
+      const updateData = {}; // <-- Corrected: small 'u' and correct variable
+  
       allowedFields.forEach(field => {
         if (req.body[field] !== undefined) {
           updateData[field] = req.body[field];
         }
       });
-
+  
       if (Object.keys(updateData).length === 0) {
         return res.status(400).json({ message: 'At least one field must be provided for update' });
       }
-      const updatedDiary = await Checklists.findByIdAndUpdate(
+  
+      const updatedDiary = await Documents.findByIdAndUpdate(
         req.params.id,
         updateData,
         { new: true }
       );
+  
       if (!updatedDiary) {
         return res.status(404).json({ message: 'Diary not found' });
       }
+  
       res.status(200).json(updatedDiary);
     } catch (error) {
       console.error(error);
@@ -105,14 +113,15 @@ const ChecklistsCreate = asyncHandler(async (req, res) => {
   };
   
   
+  
   //METHOD:Single
   //TYPE:PUBLIC
-  const SingleChecklists=async(req,res)=>{
+  const SingleDocuments=async(req,res)=>{
       try {
-          const SingleChecklists= await Checklists.findById(req.params.id);
-          res.status(200).json(SingleChecklists)
+          const SingleDocuments= await Documents.findById(req.params.id);
+          res.status(200).json(SingleDocuments)
       } catch (error) {
           res.status(404).json({msg:"Can t Find Diaries"} )
       }
   }
-module.exports = {ChecklistsCreate,AllChecklists,deleteChecklists,UpdateChecklists,SingleChecklists};
+module.exports = {DocumentsCreate,AllDocuments,deleteDocuments,UpdateDocuments,SingleDocuments};

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const User = require("../Model/user.model");
+const User = require("../Model/userModel");
 
 const ProjectsSchema = new mongoose.Schema({
   name: {
@@ -37,7 +37,7 @@ const ProjectsSchema = new mongoose.Schema({
     required: true,
   },
 }, {
-  timestamps: true, // ✅ corrected this
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Projects', ProjectsSchema);

@@ -42,7 +42,6 @@ const chatSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// Check if the model already exists before defining it again
 const Chat = mongoose.models.Chat || mongoose.model('Chat', chatSchema);
 
 module.exports = Chat;

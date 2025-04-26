@@ -22,12 +22,11 @@ routerapi.use('/api/timesheet', require('./Router/TimeSheetRouter'));
 routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 //ITPs
 routerapi.use('/api/itps', require('./Router/ITPsRouter'));
-// induction
+// induction:qa
 routerapi.use('/api/induction', require('./Router/inductionRouter'));
-<<<<<<< HEAD
-
+// induction:qa
 routerapi.use('/api/incident', require('./Router/incidentRouter'));
-
+// induction:qa
 routerapi.use('/api/siteEntry', require('./Router/siteEntryRouter'));
 
 routerapi.use('/api/siteReview', require('./Router/siteReviewRouter'));
@@ -49,9 +48,7 @@ routerapi.use('/api/rfiDashboard', require('./Router/rfiDashboardRouter'));
 routerapi.use('/api/toolbox', require('./Router/toolboxRouter'));
 
 routerapi.use('/api/annotation', require('./Router/annotationRouter'));
-
-
-=======
+// =======
 // Equipment
 routerapi.use('/api/equipment',require('./Router/PlantMachineryEquipmentRouter'))
 //plantmachinery
@@ -62,5 +59,11 @@ routerapi.use('/api/calendar', require('./Router/CalendarRouter'));
 routerapi.use('/api/defectlists', require('./Router/DefectListsRouter'));
 // checklists
 routerapi.use('/api/checklists', require('./Router/ChecklistsRouter'));
->>>>>>> 5cf050dd0f3796ec01fe0fb32d5dab1e736d1a42
+// documents
+routerapi.use('/api/documents', require('./Router/DocumentsRoiuter'));
+// Taskmanagement
+routerapi.use('/api/taskmanagement', require('./Router/TasksManagementRouter'));
+//Drawings
+routerapi.use('/api/drawings', require('./Router/DrawingRegisterRouter'));
+
 module.exports = routerapi

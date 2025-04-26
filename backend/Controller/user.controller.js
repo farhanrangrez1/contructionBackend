@@ -1,4 +1,4 @@
-const User  = require('../Model/userModel');
+const User  = require('../Model/CalendarModel');
 
 
 const cloudinary = require('../Config/cloudinary');
