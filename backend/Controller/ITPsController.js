@@ -107,6 +107,34 @@ const AllITPc = async (req, res) => {
 }
 
 
+const getITPs = async (req, res) => {
+  try {
+    // Fetching only 10 records
+    const allITPs = await ITPs.find().limit(10);
+
+    if (!allITPs.length) {
+      return res.status(404).json({
+        success: false,
+        message: "No ITPs found"
+      });
+    }
+
+    // Respond with the data
+    res.status(200).json({
+      success: true,
+      message: "Fetched 10 ITP records successfully",
+      data: allITPs
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
+    });
+  }
+};
+
+
 
 //GET SINGLE DeletePITPs
 //METHOD:DELETE
@@ -213,4 +241,4 @@ const SingleITPc = async (req, res) => {
 
 
 
-module.exports = { ITPcCreate, AllITPc, deleteITPc, UpdateITPc, SingleITPc };
+module.exports = { ITPcCreate, AllITPc, getITPs, deleteITPc, UpdateITPc, SingleITPc };

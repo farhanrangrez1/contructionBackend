@@ -22,11 +22,15 @@ routerapi.use('/api/timesheet', require('./Router/TimeSheetRouter'));
 routerapi.use('/api/swms', require('./Router/SwmsRouter'));
 //ITPs
 routerapi.use('/api/itps', require('./Router/ITPsRouter'));
-// induction
+// induction:qa
 routerapi.use('/api/induction', require('./Router/inductionRouter'));
+// <<<<<<< HEAD
+// induction:qa
+// =======
 
+// >>>>>>> 7b08282700d098e69d63bcaa9eaa3e6031dac873
 routerapi.use('/api/incident', require('./Router/incidentRouter'));
-
+// induction:qa
 routerapi.use('/api/siteEntry', require('./Router/siteEntryRouter'));
 
 routerapi.use('/api/siteReview', require('./Router/siteReviewRouter'));
@@ -48,20 +52,9 @@ routerapi.use('/api/rfiDashboard', require('./Router/rfiDashboardRouter'));
 routerapi.use('/api/toolbox', require('./Router/toolboxRouter'));
 
 routerapi.use('/api/annotation', require('./Router/annotationRouter'));
-
-routerapi.use('/api/projects', require('./Router/projectsRouter'));
-
-routerapi.use('/api/category', require('./Router/categoryRouter'));
-
-routerapi.use('/api/clientDashboard', require('./Router/clientDashboardRouter'));
-
-routerapi.use('/api/reportAnalytics', require('./Router/reportAnalyticsRouter'));
-
-routerapi.use('/api/building', require('./Router/buildingRouter'));
-
-routerapi.use('/api/buildingCategory', require('./Router/buildingCategoryRouter'));
-
-// \
+// <<<<<<< HEAD
+// =======
+// Equipment
 routerapi.use('/api/equipment',require('./Router/PlantMachineryEquipmentRouter'))
 //plantmachinery
 routerapi.use('/api/plantmachinery', require('./Router/PlantMachineryRouter'));
@@ -77,4 +70,22 @@ routerapi.use('/api/documents', require('./Router/DocumentsRoiuter'));
 routerapi.use('/api/taskmanagement', require('./Router/TasksManagementRouter'));
 //Drawings
 routerapi.use('/api/drawings', require('./Router/DrawingRegisterRouter'));
+
 module.exports = routerapi
+// =======
+
+routerapi.use('/api/projects', require('./Router/projectsRouter'));
+
+routerapi.use('/api/category', require('./Router/categoryRouter'));
+
+routerapi.use('/api/clientDashboard', require('./Router/clientDashboardRouter'));
+
+routerapi.use('/api/reportAnalytics', require('./Router/reportAnalyticsRouter'));
+
+routerapi.use('/api/building', require('./Router/buildingRouter'));
+
+routerapi.use('/api/buildingCategory', require('./Router/buildingCategoryRouter'));
+
+module.exports = routerapi
+
+// >>>>>>> 7b08282700d098e69d63bcaa9eaa3e6031dac873

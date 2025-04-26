@@ -81,7 +81,6 @@ const AllEquipment = async (req, res) => {
 }
 
 
-
 //GET SINGLE DeletePPlantMachinerys
 //METHOD:DELETE
 const deleteEquipment = async (req, res) => {
