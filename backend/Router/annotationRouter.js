@@ -1,17 +1,17 @@
 const express=require('express');
-const { createAnnotation } = require('../Controller/annotationController');
+const { createAnnotation, getAllAnnotations, getAnnotationById, updateAnnotation, deleteAnnotation } = require('../Controller/annotationController');
 
 const router = express.Router()
 
 router.post('/',createAnnotation)
 
-// router.get('/',getAllAnnouncements)
+router.get('/',getAllAnnotations)
 
-// router.get('/:id',getAnnouncementById)
+router.get('/:id',getAnnotationById)
 
-// router.patch('/:id',updateAnnouncement)
+router.patch('/:id',updateAnnotation)
 
-// router.delete('/:id',deleteAnnouncement)
+router.delete('/:id',deleteAnnotation)
 
 
 

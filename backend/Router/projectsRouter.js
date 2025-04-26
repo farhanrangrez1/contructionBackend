@@ -1,5 +1,5 @@
 const express=require('express');
-const { ProjectsCreate, Allprojects, deleteprojects, projectsUpdate, projectsSingle } = require('../Controller/projectsController');
+const { ProjectsCreate, Allprojects, deleteprojects, projectsUpdate, projectsSingle, getProjectsByUser } = require('../Controller/projectsController');
 
 const router = express.Router()
 
@@ -13,4 +13,5 @@ router.delete('/:id',deleteprojects)
 
 router.put('/:id',projectsUpdate)
 
+router.get("/by-user/:id", getProjectsByUser); 
 module.exports = router 

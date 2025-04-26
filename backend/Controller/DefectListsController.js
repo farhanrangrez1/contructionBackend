@@ -22,6 +22,7 @@ const DefectCreate = asyncHandler(async (req, res) => {
         description,
         status,
         comments,
+        date,
     } = req.body;
     
   
@@ -76,6 +77,7 @@ const DefectCreate = asyncHandler(async (req, res) => {
         description,
         status,
         comments,
+        date,
         image: imageUrls,
     });
     

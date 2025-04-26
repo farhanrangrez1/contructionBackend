@@ -96,6 +96,7 @@ const io = new Server(server, {
   }
 });
 
+<<<<<<< HEAD
 // ✅ Make socket.io accessible inside routes/controllers
 app.set('socketio', io);
 
@@ -106,16 +107,28 @@ DBconnect();
 const tempDir = path.join(__dirname, 'tmp');
 
 // ✅ Middlewares
+=======
+
+DBconnect();
+
+const tempDir = path.join(__dirname, 'tmp');
+
+>>>>>>> 5cf050dd0f3796ec01fe0fb32d5dab1e736d1a42
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5cf050dd0f3796ec01fe0fb32d5dab1e736d1a42
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use(fileUpload({
+<<<<<<< HEAD
   useTempFiles: true,
   tempFileDir: tempDir,
   limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
@@ -139,10 +152,34 @@ app.use(session({
 }));
 
 // ✅ Default route
+=======
+    useTempFiles: true,
+    tempFileDir: tempDir,
+    limits: { fileSize: 50 * 1024 * 1024 }, 
+    safeFileNames: true,
+    preserveExtension: 4,
+    abortOnLimit: true,
+    limitHandler: function(req, res, next) {
+      res.status(400).send('File size limit exceeded');
+    }
+  }));
+  
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'upload')));
+
+app.use(session({
+  secret: 'your_secret_key', 
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 86400000 } 
+}));
+
+>>>>>>> 5cf050dd0f3796ec01fe0fb32d5dab1e736d1a42
 app.post('/', (req, res) => {
   res.send('Hello World');
 });
 
+<<<<<<< HEAD
 // ✅ API router
 app.use(routerapi);
 
@@ -161,6 +198,13 @@ io.on('connection', (socket) => {
 // ✅ Server Start (Use server.listen not app.listen!)
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
+=======
+app.use(routerapi);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.listen(PORT, () => {
+>>>>>>> 5cf050dd0f3796ec01fe0fb32d5dab1e736d1a42
   console.log(`Server is running on port ${PORT}`);
 });
 
