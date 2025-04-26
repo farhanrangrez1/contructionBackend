@@ -182,7 +182,6 @@ cloudinary.config({
   
 
 
-
   const deleteAnnouncement = async (req, res) => {
     const { id } = req.params;  // Get the ID from the request parameters
   
@@ -209,10 +208,6 @@ cloudinary.config({
       });
     }
   };
-  
-
-  
-  
   
   
   

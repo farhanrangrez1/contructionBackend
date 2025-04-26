@@ -1,18 +1,31 @@
-const mongoose =require("mongoose")
+const mongoose = require('mongoose');
 
+const announcementSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,  // Title is required
+  },
+  startDate: {
+    type: String,
+  },
 
-const ITPsSchema = new mongoose.Schema({
-    projectName: { 
-      type: String,
-      required: true,
-    },
+  EndDate: {
+    type: String,
+
+  },
+  priorityLevel: {
+    type: String,
+    required: true,
+  },
+  message: {
+    type: String,
+    required: true,  // Message is required
+  },
+  image: [],
   
-    image: [String],
-  }, {
-    timestamps: true,
-  });
-  
-  module.exports = mongoose.model('ITPs', ITPsSchema);
-  
+}, { timestamps: true });  // Adds createdAt and updatedAt timestamps
+
+const Announcement = mongoose.model('Announcement', announcementSchema);
 
 
+module.exports = Announcement;

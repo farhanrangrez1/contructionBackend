@@ -14,4 +14,4 @@ router.delete('/:id',deleteprojects)
 router.put('/:id',projectsUpdate)
 
 router.get("/by-user/:id", getProjectsByUser); 
-module.exports = router 
+module.exports = router

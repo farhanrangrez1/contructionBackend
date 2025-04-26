@@ -56,7 +56,11 @@ const ITPsSchema = new mongoose.Schema({
     timestamps: true,
   });
   
-  module.exports = mongoose.model('ITPs', ITPsSchema);
+// ✅ Correct Safe Model Creation
+
+const ITPs = mongoose.model('ITPs', ITPsSchema);
+
+module.exports = ITPs;
   
 
 

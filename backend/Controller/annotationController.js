@@ -2,7 +2,6 @@ const Annotation = require("../Model/annotationModel");
 const asyncHandler = require("express-async-handler");
 
 
-
 const createAnnotation = asyncHandler(async (req, res) => {
     const { title, description, author } = req.body;
   
