@@ -20,7 +20,8 @@ cloudinary.config({
       siteLocation,
       siteSupervisor,
       inductionDate,
-      siteAccessHours,
+      accessStartTime,
+      accessEndTime,
       //acknowledgements,
     } = req.body;
 
@@ -61,7 +62,8 @@ cloudinary.config({
         siteLocation,
         siteSupervisor,
         inductionDate: new Date(inductionDate),
-        siteAccessHours,
+        accessStartTime,
+        accessEndTime,
         acknowledgements,
         image: fileUrl ? [fileUrl] : [], 
       });
@@ -139,7 +141,9 @@ cloudinary.config({
       siteLocation, 
       siteSupervisor, 
       inductionDate, 
-      siteAccessHours, 
+      accessStartTime,
+      accessEndTime
+
       //acknowledgements 
     } = req.body;
 
@@ -189,7 +193,9 @@ cloudinary.config({
           siteLocation,
           siteSupervisor,
           inductionDate: new Date(inductionDate),
-          siteAccessHours,
+          accessStartTime,
+          accessEndTime,
+
           acknowledgements,
           image: fileUrl ? [fileUrl] : [], // Update image if a new one is uploaded
         },

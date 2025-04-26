@@ -15,29 +15,25 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-    trim: true,
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
+   
+    
   },
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: 8,
-    select: false
+    
+    
   },
   role: {
     type: String,
     required: [true, 'Role is required'],
-    enum: ['admin', 'worker', 'user', 'guest']
+    
   },
   department: {
     type: String,
     required: [true, 'Department is required']
   },
-  profileImage: {
-    type: String,
-  },
+  profileImage: [],
   permissions: {
     viewProjectDetails: {
       type: Boolean,

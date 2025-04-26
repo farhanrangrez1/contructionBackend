@@ -9,35 +9,37 @@ const router = express.Router();
 // router.use(authController.protect);
 
 // Admin only routes
-router.route('/')
+router
+  .route('/')
   .get(
-    // TEMPORARY: Admin restriction disabled for initial setup
-    // authController.restrictTo('admin'), 
+    // authController.protect,
+    // authController.restrictTo('admin'),
     userController.getAllUsers
   )
   .post(
-    // TEMPORARY: Admin restriction disabled for initial setup
+    // authController.protect,
     // authController.restrictTo('admin'),
-    userController.uploadUserPhoto,
-    userController.createUser
+    userController.createUser // Assumes file upload is handled by express-fileupload
   );
 
-router.route('/:id')
+router
+  .route('/:id')
   .get(
-    // TEMPORARY: Admin restriction disabled for initial setup
+    // authController.protect,
     // authController.restrictTo('admin'),
     userController.getUser
   )
   .patch(
-    // TEMPORARY: Admin restriction disabled for initial setup
+    // authController.protect,
     // authController.restrictTo('admin'),
-    userController.uploadUserPhoto,
     userController.updateUser
   )
   .delete(
-    // TEMPORARY: Admin restriction disabled for initial setup
+    // authController.protect,
     // authController.restrictTo('admin'),
     userController.deleteUser
   );
 
+
+  
 module.exports = router;

@@ -84,225 +84,61 @@ cloudinary.config({
   };
 
 
-  
-  const getAllIncidents = async (req, res) => {
+
+  const getAllSiteReviews = async (req, res) => {
     try {
-      const incidents = await Incident.find().sort({ dateTime: -1 });  // Sort by date (newest first)
+      // Fetch all site reviews
+      const siteReviews = await SiteReview.find();
+  
+      // Rearrange the keys to ensure _id is first
+      const formattedReviews = siteReviews.map((review) => {
+        const { _id, ...rest } = review.toObject(); // Convert Mongoose document to plain object
+        return { _id, ...rest }; // Ensure _id is first
+      });
+  
+      // Return success response
       res.status(200).json({
         success: true,
-        incidents,
+        data: formattedReviews,
       });
     } catch (error) {
-      console.error('Error fetching incidents:', error);
       res.status(500).json({
         success: false,
-        message: 'An error occurred while fetching incidents',
+        message: 'Error fetching site reviews',
         error: error.message,
       });
     }
   };
-  
 
 
- 
 
-
-  const getIncidentById = async (req, res) => {
-    const { id } = req.params;  // Get the incident ID from the URL
+  const getSiteReviewById = async (req, res) => {
+    const { id } = req.params; // Extract the ID from the request params
   
     try {
-      const incident = await Incident.findById(id);
+      // Fetch the site review by ID
+      const siteReview = await SiteReview.findById(id);
   
-      if (!incident) {
+      if (!siteReview) {
         return res.status(404).json({
           success: false,
-          message: 'Incident not found',
+          message: 'Site review not found',
         });
       }
   
+      // Rearrange the keys to ensure _id comes first
+      const { _id, ...rest } = siteReview.toObject(); // Convert Mongoose document to plain object
+      const formattedSiteReview = { _id, ...rest }; // Ensure _id comes first
+  
+      // Return success response with the formatted site review
       res.status(200).json({
         success: true,
-        incident,
-      });
-    } catch (error) {
-      console.error('Error fetching incident by ID:', error);
-      res.status(500).json({
-        success: false,
-        message: 'An error occurred while fetching the incident',
-        error: error.message,
-      });
-    }
-  };
-
-
-
-  const updateIncident = async (req, res) => {
-    const { id } = req.params;
-    const { incidentType, dateTime, location, description, severityLevel, witnesses, immediateActions } = req.body;
-  
-    try {
-      // Retrieve the existing incident
-      const existingIncident = await Incident.findById(id);
-      if (!existingIncident) {
-        return res.status(404).json({ success: false, message: 'Incident not found' });
-      }
-  
-      // Delete the existing image from Cloudinary if it exists
-      if (existingIncident.image && existingIncident.image.public_id) {
-        await cloudinary.uploader.destroy(existingIncident.image.public_id);
-      }
-  
-      // Upload the new image to Cloudinary if provided
-      let imageUrl = '';
-      if (req.files && req.files.image) {
-        const file = req.files.image;
-        const uploadResult = await cloudinary.uploader.upload(file.tempFilePath, {
-          folder: 'uploads',
-          resource_type: 'image',
-        });
-        imageUrl = uploadResult.secure_url;
-      }
-  
-      // Update the incident in the database
-      const updatedIncident = await Incident.findByIdAndUpdate(
-        id,
-        {
-          incidentType,
-          dateTime: new Date(dateTime),
-          location,
-          description,
-          severityLevel,
-          witnesses,
-          immediateActions,
-          image: imageUrl ? [imageUrl] : existingIncident.image,
-        },
-        { new: true }
-      );
-  
-      res.status(200).json({
-        success: true,
-        message: 'Incident updated successfully',
-        incident: updatedIncident,
-      });
-    } catch (error) {
-      console.error('Error updating incident:', error);
-      res.status(500).json({
-        success: false,
-        message: 'An error occurred while updating the incident',
-        error: error.message,
-      });
-    }
-  };
-
-
-
-  const deleteIncident = async (req, res) => {
-    const { id } = req.params;
-  
-    try {
-      // Retrieve the existing incident
-      const existingIncident = await Incident.findById(id);
-      if (!existingIncident) {
-        return res.status(404).json({ success: false, message: 'Incident not found' });
-      }
-  
-      // Delete the image from Cloudinary if it exists
-      if (existingIncident.image && existingIncident.image.public_id) {
-        await cloudinary.uploader.destroy(existingIncident.image.public_id);
-      }
-  
-      // Delete the incident from the database
-      await Incident.findByIdAndDelete(id);
-  
-      res.status(200).json({
-        success: true,
-        message: 'Incident deleted successfully',
-      });
-    } catch (error) {
-      console.error('Error deleting incident:', error);
-      res.status(500).json({
-        success: false,
-        message: 'An error occurred while deleting the incident',
-        error: error.message,
-      });
-    }
-  };
-
-
-  const getAllSiteEntries = async (req, res) => {
-    try {
-      // Retrieve all site entries
-      const siteEntries = await SiteEntry.find();
-      
-      // Format the response as per your requirement
-      const formattedData = siteEntries.map(entry => ({
-        _id: entry._id,
-        fullName: entry.fullName,
-        workerId: entry.workerId,
-        phoneNumber: entry.phoneNumber,
-        emailAddress: entry.emailAddress,
-        safetyEquipment: entry.safetyEquipment,
-        siteName: entry.siteName,
-        siteSupervisor: entry.siteSupervisor,
-        inductionDate: entry.inductionDate,
-        siteLocation: entry.siteLocation,
-        createdAt: entry.createdAt,
-        updatedAt: entry.updatedAt,
-        __v: entry.__v
-      }));
-  
-      // Respond with the formatted data
-      res.status(200).json({
-        success: true,
-        data: formattedData
+        data: formattedSiteReview,
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: 'Error fetching site entries',
-        error: error.message
-      });
-    }
-  };
-
-
-
-  const getSiteEntryById = async (req, res) => {
-    const { id } = req.params;  // Get the site entry ID from the URL
-  
-    try {
-      const siteEntry = await SiteEntry.findById(id);
-  
-      if (!siteEntry) {
-        return res.status(404).json({
-          success: false,
-          message: 'Site entry not found',
-        });
-      }
-  
-      // Return the response in the required format (not an array, just a single object)
-      res.status(200).json({
-        success: true,
-        data: {
-          _id: siteEntry._id,
-          fullName: siteEntry.fullName,
-          workerId: siteEntry.workerId,
-          phoneNumber: siteEntry.phoneNumber,
-          emailAddress: siteEntry.emailAddress,
-          safetyEquipment: siteEntry.safetyEquipment,
-          siteName: siteEntry.siteName,
-          siteSupervisor: siteEntry.siteSupervisor,
-          inductionDate: siteEntry.inductionDate,
-          siteLocation: siteEntry.siteLocation,
-          createdAt: siteEntry.createdAt,
-          updatedAt: siteEntry.updatedAt,
-          __v: siteEntry.__v,
-        },
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Error fetching site entry',
+        message: 'Error fetching site review',
         error: error.message,
       });
     }
@@ -311,68 +147,79 @@ cloudinary.config({
 
 
 
-  const updateSiteEntry = async (req, res) => {
-    const { id } = req.params;
+  const updateSiteReview = async (req, res) => {
+    const { id } = req.params; // Extract the ID from the request params
     const {
-      fullName,
-      workerId,
-      phoneNumber,
-      emailAddress,
-      safetyEquipment,
       siteName,
-      siteSupervisor,
-      inductionDate,
-      siteLocation
+      siteLocation,
+      reviewDate,
+      reviewerName,
+      complianceStatus,
+      checkedItems,
+      recommendations,
+      assignedTo,
+      approvalStatus,
     } = req.body;
   
     try {
-      const siteEntry = await SiteEntry.findById(id);
+      // Find the site review by ID
+      const siteReview = await SiteReview.findById(id);
   
-      if (!siteEntry) {
+      if (!siteReview) {
         return res.status(404).json({
           success: false,
-          message: 'Site entry not found',
+          message: 'Site review not found',
         });
       }
   
-      // Update the site entry with the provided details
-      siteEntry.fullName = fullName || siteEntry.fullName;
-      siteEntry.workerId = workerId || siteEntry.workerId;
-      siteEntry.phoneNumber = phoneNumber || siteEntry.phoneNumber;
-      siteEntry.emailAddress = emailAddress || siteEntry.emailAddress;
-      siteEntry.safetyEquipment = safetyEquipment || siteEntry.safetyEquipment;
-      siteEntry.siteName = siteName || siteEntry.siteName;
-      siteEntry.siteSupervisor = siteSupervisor || siteEntry.siteSupervisor;
-      siteEntry.inductionDate = inductionDate || siteEntry.inductionDate;
-      siteEntry.siteLocation = siteLocation || siteEntry.siteLocation;
+      // Update the site review fields
+      siteReview.siteName = siteName || siteReview.siteName;
+      siteReview.siteLocation = siteLocation || siteReview.siteLocation;
+      siteReview.reviewDate = reviewDate || siteReview.reviewDate;
+      siteReview.reviewerName = reviewerName || siteReview.reviewerName;
+      siteReview.complianceStatus = complianceStatus || siteReview.complianceStatus;
+      
+      // Ensure checkedItems is an object and update
+      if (checkedItems && typeof checkedItems === 'object' && !Array.isArray(checkedItems)) {
+        siteReview.checkedItems = checkedItems;
+      } else if (checkedItems) {
+        console.error('Invalid checkedItems format');
+      }
   
-      // Save the updated site entry
-      const updatedSiteEntry = await siteEntry.save();
+      siteReview.recommendations = recommendations || siteReview.recommendations;
+      siteReview.assignedTo = assignedTo || siteReview.assignedTo;
+      siteReview.approvalStatus = approvalStatus || siteReview.approvalStatus;
   
-      // Format the response to match your requested structure
+      // Handle file upload if a new image is provided
+      if (req.files && req.files.image) {
+        const imageFile = req.files.image;
+        const uploadResult = await cloudinary.uploader.upload(imageFile.tempFilePath, {
+          folder: 'site_reviews',
+          resource_type: 'image',
+        });
+  
+        if (uploadResult && uploadResult.secure_url) {
+          siteReview.image = [uploadResult.secure_url]; // Update image URL
+        }
+      }
+  
+      // Save the updated site review
+      const updatedReview = await siteReview.save();
+  
+      // Rearrange the keys to ensure _id comes first
+      const { _id, ...rest } = updatedReview.toObject(); // Convert Mongoose document to plain object
+      const formattedSiteReview = { _id, ...rest }; // Ensure _id comes first
+  
+      // Return success response with the formatted site review
       res.status(200).json({
         success: true,
-        message: 'Site entry updated successfully',
-        data: {
-          _id: updatedSiteEntry._id,
-          fullName: updatedSiteEntry.fullName,
-          workerId: updatedSiteEntry.workerId,
-          phoneNumber: updatedSiteEntry.phoneNumber,
-          emailAddress: updatedSiteEntry.emailAddress,
-          safetyEquipment: updatedSiteEntry.safetyEquipment,
-          siteName: updatedSiteEntry.siteName,
-          siteSupervisor: updatedSiteEntry.siteSupervisor,
-          inductionDate: updatedSiteEntry.inductionDate,
-          siteLocation: updatedSiteEntry.siteLocation,
-          createdAt: updatedSiteEntry.createdAt,
-          updatedAt: updatedSiteEntry.updatedAt,
-          __v: updatedSiteEntry.__v
-        },
+        message: 'Site review updated successfully',
+        data: formattedSiteReview, // Send _id first
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: 'Error updating site entry',
+        message: 'Error updating site review',
         error: error.message,
       });
     }
@@ -380,34 +227,51 @@ cloudinary.config({
 
 
 
-  const deleteSiteEntry = async (req, res) => {
-    const { id } = req.params;
+  const deleteSiteReview = async (req, res) => {
+    const { id } = req.params; // Extract the ID from the request params
   
     try {
-      // Find and delete the site entry by ID
-      const siteEntry = await SiteEntry.findByIdAndDelete(id);
+      // Find and delete the site review by ID
+      const siteReview = await SiteReview.findByIdAndDelete(id);
   
-      // If site entry is not found, return a 404
-      if (!siteEntry) {
+      if (!siteReview) {
         return res.status(404).json({
           success: false,
-          message: 'Site entry not found',
+          message: 'Site review not found',
         });
       }
   
-      // Return success message after deletion
+      // Return success response
       res.status(200).json({
         success: true,
-        message: 'Site entry deleted successfully',
+        message: 'Site review deleted successfully',
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: 'Error deleting site entry',
+        message: 'Error deleting site review',
         error: error.message,
       });
     }
   };
+  
+  
+  
+  
+  
+  
+  
+
+
+
+ 
+
+
+ 
+
+
+
+  
   
   
   
@@ -418,4 +282,4 @@ cloudinary.config({
 
 
 
-module.exports = {createSiteReview, getAllSiteEntries, getSiteEntryById, updateSiteEntry, deleteSiteEntry};
+module.exports = {createSiteReview, getAllSiteReviews, getSiteReviewById, updateSiteReview, deleteSiteReview};

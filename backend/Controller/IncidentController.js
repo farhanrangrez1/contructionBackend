@@ -1,5 +1,9 @@
 
 const Incident = require("../Model/IncidentModel");
+const SWMS=require("../Model/SwmsModel");
+const ITPs = require('../Model/ITPsModel');
+
+
 const asyncHandler = require("express-async-handler");
 
 const cloudinary = require('../Config/cloudinary');
@@ -86,10 +90,7 @@ cloudinary.config({
       });
     }
   };
-  
-
-
- 
+   
 
 
   const getIncidentById = async (req, res) => {
@@ -215,7 +216,7 @@ cloudinary.config({
   
 
 
-
+ 
 
 
 
